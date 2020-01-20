@@ -65,7 +65,6 @@ public class ConnectFour {
         /* Returns true if diskColor won, false if no result */ 
         private boolean checkBoard(boolean diskColor) {
 
-
             int currentRow = 0;
             int currentCol = 0;
 
@@ -80,16 +79,16 @@ public class ConnectFour {
                     }
 
                     if(gameBoard[i][j] != '\0') currentRow++;
+
                     if(currentRow == 4) return true;
-                }
 
-                if(inBounds(i+1,j) && getColor(gameBoard[i][j]) == getColor(gameBoard[i+1][j]) && gameBoard[i][j] != '\0') {
-                    System.out.println("i: " + i + " j: " + j + " currentCol: " + currentCol);
-                    currentCol++;
+                    
+                    if(inBounds(i+1,j) && getColor(gameBoard[i][j]) == getColor(gameBoard[i+1][j]) && gameBoard[i][j] != '\0') {
+                        System.out.println("i: " + i + " j: " + j + " currentCol: " + currentCol);
+                        currentCol++;
+                        if(currentCol == 3) return true;
+                    } else currentCol = 0;
                 }
-
-                else currentCol = 0;
-                if(currentCol == 4) return true;
             }
 
             return false;
