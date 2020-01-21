@@ -26,7 +26,7 @@ public class ConnectFour {
         }
         
         private void displayBoard() {
-
+            
             for(int i = 0; i < numRows; i++) {
 
                 System.out.println(getDividingLine());
@@ -38,7 +38,9 @@ public class ConnectFour {
                 System.out.println();
             }
 
-            System.out.println(getDividingLine()+"\n");
+            System.out.println(getDividingLine()); 
+        	
+        	System.out.println("  0   1   2   3   4   5   6  \n");
 
         }
 
@@ -58,39 +60,39 @@ public class ConnectFour {
             displayBoard();
 
             //call checkBoard at end to see if anyone won
-            return checkBoard(diskColor);
+            return checkBoard(diskColor,i,col);
         }
 
         /* Returns true if diskColor won, false if no result */ 
-        private boolean checkBoard(char diskColor) {
-
-            int currentRow = 0;
-            int currentCol = 0;
-
-            for(int i = 0; i < numRows; i++) {
-                int j;
-
-                for(j = 0; j < numColumns; j++) {
-                    if(gameBoard[i][j] != diskColor) {
-                        //clear column
-                        currentRow = 0;
-                        break;
-                    }
-
-                    if(gameBoard[i][j] != '\0') currentRow++;
-
-                    if(currentRow == 4) return true;
-
-                    
-                    if(inBounds(i+1,j) && gameBoard[i][j] == gameBoard[i+1][j] && gameBoard[i][j] != '\0') {
-                        System.out.println("i: " + i + " j: " + j + " currentCol: " + currentCol);
-                        currentCol++;
-                        if(currentCol == 3) return true;
-                    } else currentCol = 0;
-                }
-            }
-
-            return false;
+        private boolean checkBoard(char diskColor, int row, int col) {
+        
+			int posx = row;
+			int posy = col;
+			
+			int streakx = 0;
+			int streaky = 0;
+			
+			int streakPOSxy = 0;
+			int streakNEGxy = 0;
+			
+			for(int i = -3; i <= 3; i++) {
+				if( inBounds(posx+i, posy) && gameBoard[posx+i][posy] == gameBoard[posx][posy] ) { streakx++;}
+				else { streakx = 0;}
+				
+				if( inBounds(posx, posy+i) && gameBoard[posx][posy+i] == gameBoard[posx][posy]) { streaky++;}
+				else { streaky = 0;}
+				
+				if( inBounds(posx+i, posy+i) && gameBoard[posx+i][posy+i] == gameBoard[posx][posy] ) { streakPOSxy++; }
+				else { streakPOSxy = 0; }
+				
+				if( inBounds(posx+i, posy-i) && gameBoard[posx+i][posy-i] == gameBoard[posx][posy] ) {streakNEGxy++;}
+				else { streakNEGxy = 0; }
+				
+				if( streakx == 4 || streaky == 4 || streakPOSxy == 4 || streakNEGxy == 4) { return true; }
+				
+			}
+			
+			return false;
         }
         
         //is it in bounds? There are 6 rows and 7 columns total!
