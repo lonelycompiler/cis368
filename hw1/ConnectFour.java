@@ -5,9 +5,8 @@ import java.util.InputMismatchException;
 
 public class ConnectFour {
 
-    private boolean RED = true;
-    private boolean YELLOW = false;
-    private boolean currentColor;
+    private final char[] colors = {'R', 'Y'};
+    int currentColor;
 
     private Scanner sc = new Scanner(System.in);
 
@@ -44,7 +43,7 @@ public class ConnectFour {
         }
 
         /* Returns true if diskColor won, false if no result */ 
-        private boolean dropDisk(boolean diskColor, int col) {
+        private boolean dropDisk(char diskColor, int col) {
             //get the next free spot on y-axis
             int i;
 
@@ -54,7 +53,7 @@ public class ConnectFour {
                 if(!this.inBounds(i+1, col)) break;
             }
 
-            gameBoard[i][col] = (diskColor ? 'R' : 'Y');
+            gameBoard[i][col] = diskColor;
 
             displayBoard();
 
@@ -63,7 +62,7 @@ public class ConnectFour {
         }
 
         /* Returns true if diskColor won, false if no result */ 
-        private boolean checkBoard(boolean diskColor) {
+        private boolean checkBoard(char diskColor) {
 
             int currentRow = 0;
             int currentCol = 0;
@@ -72,7 +71,7 @@ public class ConnectFour {
                 int j;
 
                 for(j = 0; j < numColumns; j++) {
-                    if(getColor(gameBoard[i][j]) != diskColor) {
+                    if(gameBoard[i][j] != diskColor) {
                         //clear column
                         currentRow = 0;
                         break;
@@ -83,7 +82,7 @@ public class ConnectFour {
                     if(currentRow == 4) return true;
 
                     
-                    if(inBounds(i+1,j) && getColor(gameBoard[i][j]) == getColor(gameBoard[i+1][j]) && gameBoard[i][j] != '\0') {
+                    if(inBounds(i+1,j) && gameBoard[i][j] == gameBoard[i+1][j] && gameBoard[i][j] != '\0') {
                         System.out.println("i: " + i + " j: " + j + " currentCol: " + currentCol);
                         currentCol++;
                         if(currentCol == 3) return true;
@@ -117,7 +116,7 @@ public class ConnectFour {
 
         Board board = new Board(6,7);
 
-        currentColor = RED;
+        currentColor = 0;
         int colToDropIn = 0;
         boolean result;
         board.displayBoard();
@@ -126,7 +125,7 @@ public class ConnectFour {
         while(true) {
 
             while(true){
-                System.out.print("Drop a " + this.getColor(currentColor) + " disk at column (0-6): ");
+                System.out.print("Drop a " + colors[currentColor] + " disk at column (0-6): ");
 
                 try {
                     colToDropIn = sc.nextInt();
@@ -142,23 +141,18 @@ public class ConnectFour {
                 else break;
             }
 
-            result = board.dropDisk(currentColor, colToDropIn);
+            result = board.dropDisk(colors[currentColor], colToDropIn);
             
 
             if(result) {
-                System.out.println( (currentColor ? "Red" : "Yellow") + " wins. Game End!" );
+                System.out.println( (getColor(colors[currentColor]) ? "Red" : "Yellow") + " wins. Game End!" );
                 break;
             }
 
-            currentColor = !currentColor;
+            //change current color to next color
+            currentColor=(currentColor+1)%2;
 
         }
-    }
-    
-    //if boolean color given, color char given as String
-    private String getColor(boolean currentColor) {
-        if(currentColor) return "red";
-        else return "yellow";
     }
     
     //if char color given, boolean char returned
