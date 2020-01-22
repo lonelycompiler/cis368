@@ -1,4 +1,4 @@
-//seven column six row
+//Gopal Shukla 2719429
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
